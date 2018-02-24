@@ -6,6 +6,10 @@ if(!isset($_SESSION["username"])){
 	window.location.href="login.php"
 	</script>';
 }
+//$fl = fopen('user_folders/'.$_SESSION["username"].'/product_data.json', 'r');
+if (filesize('user_folders/'.$_SESSION["username"].'/product_data.json') > 0){
+	header('location:template.php');
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -20,6 +24,7 @@ if(!isset($_SESSION["username"])){
 		<script src="js/skel-layers.min.js"></script>
 		<script src="js/init.js"></script>
 		<script src="js/myjs.js"></script>
+		<script src="js/list.js"></script>
 		<noscript>
 			<link rel="stylesheet" href="css/skel.css" />
 			<link rel="stylesheet" href="css/style.css" />
@@ -38,7 +43,7 @@ if(!isset($_SESSION["username"])){
 						<li><a href="#">Website Builder</a></li>
 						<?php 
 						if(isset($_SESSION["username"])){
-							echo '<li><a href="logout.php" class="button special" rel="nofollow" onClick="return confirm(\'Do You Really Want To LogOut??\');">LogOUT</a></li>';
+							echo '<li><a href="logout.php" class="button special" rel="nofollow" onClick="return confirm(\'Do You Really Want To logout??\');">Logout</a></li>';
 						}
 						else{
 							echo '<li><a href="login.php" class="button special">Sign Up/In</a></li>';
@@ -62,6 +67,7 @@ if(!isset($_SESSION["username"])){
 					<div id='first_div'>
 						<header>
 						<h3>Step 1</h3>
+						<h3>Note: DO NOT REFRESH PAGE NOW</h3>
 						</header>
 						<div class="12u 12u$(4)">
 							<table>
@@ -70,7 +76,9 @@ if(!isset($_SESSION["username"])){
 							<td>How Many Types Of Products You Want In Your Shop? </td>
 							<td>
 							<div name='type' id='type' class="10u$">
-							<div class="select-wrapper">
+							<input type="text" name="product_type" id="product_type" required/>
+							
+							<!--<div class="select-wrapper">
 								<select name="product_type" id="product_type" onchange='make_fields();' onfocus='check_data_shop();'>
 								  <option value="">- Types -</option>
 								  <option value="1">1</option>
@@ -80,16 +88,28 @@ if(!isset($_SESSION["username"])){
 								  <option value="5">5</option>
 								  </select>
 							</div>
+							-->
 							</div>
 							</td></tr>
 							</table>
 						</div>
 						</div>
+						<!-- <div id="next_button_div" style="display:none;">
+							<input type="button" id="next_button" name="next_button" value="next entry" class="special">
+						</div> -->
 						<div id='hidden_second' style='display:none;'></div>
-						<div class="12u$">
+						<div class="12u$" id='before_submit'>
 							<ul class="actions">
-								<li><input type="button" id='submit_button' name='next_button' value="Submit" class="special" onclick='last_check();' /></li>
+								<li><input type="button" id='submit_button' name='next_button' value="Submit" class="special" onclick="last_check();" /></li>
 								<li><input type="button" id='reset_button' name='reset_button' value="Reset" onclick='form_reset();'/></li>
+							</ul>
+						</div>
+
+						<div id='final_submit' style="display:none;">
+							<ul class="actions">
+								<li><input type="button" id='button_last_submit' name='button_last_submit' value="Submit" class="special" onclick="last_submit();" /></li>
+								<li><input type="button" id='preview_product' name='preview_product' value="Preview products" class="special" onclick="window.open('preview-products.php','_blank');" /></li>
+								<li><input type="button" id='download_data' name='download_data' value="download data in excel" class="special"onclick="window.open('download-product-data.php','_blank');" /></li>
 							</ul>
 						</div>
 					</div>
@@ -124,7 +144,42 @@ if(!isset($_SESSION["username"])){
 							<section class="3u$ 6u$(medium) 12u$(small)">
 								<h3>Contact Us</h3>
 								<ul class="unstyled">
-									<li><a><?php session_start(); 
+									<li><a>mail@onlineshopmaker.dx.am</a></li>
+									<li><a>(+91)9427606780</a></li>
+									<li><a>(+91)9408640023</a></li>
+								</ul>
+							</section>
+							</div>
+					</section>
+					<div class="row">
+						<div class="8u 12u$(medium)">
+							<ul class="copyright">
+								<li>&copy; Online Shop Maker. All rights reserved.</li>
+								<li>Design & Images: <a href="#">Online Shop Maker</a></li>
+							</ul>
+						</div>
+						<div class="4u$ 12u$(medium)">
+							<ul class="icons">
+								<li>
+									<a class="icon rounded fa-facebook"><span class="label">Facebook</span></a>
+								</li>
+								<li>
+									<a class="icon rounded fa-twitter"><span class="label">Twitter</span></a>
+								</li>
+								<li>
+									<a class="icon rounded fa-google-plus"><span class="label">Google+</span></a>
+								</li>
+								<li>
+									<a class="icon rounded fa-linkedin"><span class="label">LinkedIn</span></a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</footer>
+					
+					
+							<?php  
 if(!isset($_SESSION["username"])){
 	echo '<script language="javascript">
 	alert("You need to Sign In to use this feature!!!")

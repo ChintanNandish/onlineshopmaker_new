@@ -1,4 +1,5 @@
-<?php session_start(); 
+<?php 
+session_start(); 
 if(!isset($_SESSION["username"])){
 	$_SESSION['go']=1;
 	echo '<script language="javascript">
@@ -11,7 +12,7 @@ if(!isset($_SESSION["username"])){
 <html lang="en">
 	<head>
 		<meta charset="UTF-8">
-		<title>Website Builder</title>
+		<title>Templates</title>
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="description" content="" />
 		<meta name="keywords" content="" />
@@ -20,7 +21,6 @@ if(!isset($_SESSION["username"])){
 		<script src="js/skel-layers.min.js"></script>
 		<script src="js/init.js"></script>
 		<script src="js/myjs.js"></script>
-		<script src="js/list.js"></script>
 		<noscript>
 			<link rel="stylesheet" href="css/skel.css" />
 			<link rel="stylesheet" href="css/style.css" />
@@ -36,7 +36,7 @@ if(!isset($_SESSION["username"])){
 					<ul>
 						<li><a href="index.php">Home</a></li>
 						<li><a href="ourgoal.php">Our Goal</a></li>
-						<li><a href="#">Website Builder</a></li>
+						<li><a href="websitebuilder.php">Website Builder</a></li>
 						<?php 
 						if(isset($_SESSION["username"])){
 							echo '<li><a href="logout.php" class="button special" rel="nofollow" onClick="return confirm(\'Do You Really Want To logout??\');">Logout</a></li>';
@@ -51,65 +51,28 @@ if(!isset($_SESSION["username"])){
 
 		<!-- Main -->
 			<section id="main" class="wrapper">
+				<h2 align="center" >Choose From Our Finest Themes</h2>
+				<h3 align="center" >Made By Our Design Crew</h3>
+				<h4 align="center">Click on Image to Choose</h4>
 				<div class="container">
-
-					<header class="major">
-						<h2>Builder</h2>
-						<p>Here Shop Goes Online</p>
-					</header>
-					<form method="post" name='builder' action="">
-				
-					<div id='main_div' align='center'>
-					<div id='first_div'>
-						<header>
-						<h3>Step 1</h3>
-						</header>
-						<div class="12u 12u$(4)">
-							<table>
-							<tr><td>Your Shop Name</td><td><input type="text" name="shopname" id="shopname"  placeholder="Shop Name"  required /></td></tr>
-							<tr>
-							<td>How Many Types Of Products You Want In Your Shop? </td>
-							<td>
-							<div name='type' id='type' class="10u$">
-							<input type="text" name="product_type" id="product_type" required/>
-							
-							<!--<div class="select-wrapper">
-								<select name="product_type" id="product_type" onchange='make_fields();' onfocus='check_data_shop();'>
-								  <option value="">- Types -</option>
-								  <option value="1">1</option>
-								  <option value="2">2</option>
-								  <option value="3">3</option>
-								  <option value="4">4</option>
-								  <option value="5">5</option>
-								  </select>
-							</div>
-							-->
-							</div>
-							</td></tr>
-							</table>
-						</div>
-						</div>
-						<!-- <div id="next_button_div" style="display:none;">
-							<input type="button" id="next_button" name="next_button" value="next entry" class="special">
-						</div> -->
-						<div id='hidden_second' style='display:none;'></div>
-						<div class="12u$" id='before_submit'>
-							<ul class="actions">
-								<li><input type="button" id='submit_button' name='next_button' value="Submit" class="special" onclick="last_check();" /></li>
-								<li><input type="button" id='reset_button' name='reset_button' value="Reset" onclick='form_reset();'/></li>
-							</ul>
-						</div>
-
-						<div id='final_submit' style="display:none;">
-							<ul class="actions">
-								<li><input type="button" id='button_last_submit' name='button_last_submit' value="Submit" class="special" onclick="last_submit();" /></li>
-								<li><input type="button" id='preview_product' name='preview_product' value="Preview products" class="special" onclick="window.open('preview-products.php','_blank');" /></li>
-								<li><input type="button" id='download_data' name='download_data' value="download data in excel" class="special"onclick="window.open('download-product-data.php','_blank');" /></li>
-							</ul>
-						</div>
+				<div class="box alt">
+					<div class="row 50% uniform">
+						<?php $files = glob("images/templates/*.{jpg,gif,png,jpeg}", GLOB_BRACE);
+							$count = 0;
+							foreach($files as $f){
+								$img = ltrim($f,'.');
+								if($count == 0 || $count == count($files)-1 ){
+									echo '<div class="12u"><span class="image fit"><img id='.($count+1).' src='.$img.' onclick="img_click('.($count+1).');" alt="Template '.($count+1).'" /></span></div>';
+								}
+								else{
+									echo '<div class="4u"><span class="image fit"><img id='.($count+1).' src='.$img.' onclick="img_click('.($count+1).');" alt="Template '.($count+1).'" /></span></div>';
+								}
+								$count++;
+							}
+						?>
 					</div>
-				</form>
-						
+				</div>
+					
 				</div>
 			</section>
 
@@ -124,7 +87,7 @@ if(!isset($_SESSION["username"])){
 									<li><a href="index.php">Home</a></li>
 									<li><a href="login.php">Register/Log In</a></li>
 									<li><a href="ourgoal.php">Our Goal</a></li>
-									<li><a href="#">Website Builder</a></li>
+									<li><a href="websitebuilder.php">Website Builder</a></li>
 								</ul>
 							</section>
 							<section class="3u 6u(medium) 12u$(small)">
@@ -175,10 +138,10 @@ if(!isset($_SESSION["username"])){
 					
 					
 							<?php  
-if(!isset($_SESSION["username"])){
+/*if(!isset($_SESSION["username"])){
 	echo '<script language="javascript">
 	alert("You need to Sign In to use this feature!!!")
 	window.location.href="login.php"
 	</script>';
-}
+}*/
 ?>
