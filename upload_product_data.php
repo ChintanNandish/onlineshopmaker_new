@@ -76,15 +76,16 @@
 	if (isset($_SESSION['json_str'][$product_cat])){
 		if (isset($_SESSION['json_str'][$product_cat][$product_subcat])){
 			$temp_arr = $_SESSION['json_str'][$product_cat][$product_subcat];
+			$temp_arr_aa = $_SESSION['json_str'][$product_cat];
 			$temp_arr2[$product_subcat] = array_merge($temp_arr, $json_str);
-			$temp_arr3[$product_cat] = $temp_arr2;
-			$_SESSION['json_str'] = $temp_arr3;
+			$temp_arr3[$product_cat] = array_merge($temp_arr_aa, $temp_arr2);
+			$_SESSION['json_str'] = array_merge($_SESSION['json_str'], $temp_arr3);
 		}
 		else{
 			$temp_arr2[$product_subcat] = $json_str;
 			$temp_arr3 = $_SESSION['json_str'][$product_cat];
 			$temp_arr4[$product_cat] = array_merge($temp_arr3, $temp_arr2);
-			$_SESSION['json_str'] = $temp_arr4;
+			$_SESSION['json_str'] = array_merge($_SESSION['json_str'], $temp_arr4);
 		}
 	}
 	else{
