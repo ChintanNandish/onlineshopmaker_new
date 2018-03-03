@@ -11,10 +11,10 @@ if(isset($_GET['user']) && !empty($_GET['user']) AND isset($_GET['hash']) && !em
 	if ($match > 0){
 		$db_pwd=$res['Password'];
 		$db_user=$res['User_name'];
-        $temp_hash = str_replace("+", " ", openssl_encrypt($db_pwd,"AES-128-ECB",$db_user));
+                $temp_hash = str_replace("+", " ", openssl_encrypt($db_pwd,"AES-128-ECB",$db_user));
 		if($hash == $temp_hash){
 			$q=mysqli_query($c,"UPDATE user SET Active=1 WHERE User_name='".$user."' AND Active=0");
-            mkdir('user_folders/'.$user);
+                        mkdir('user_folders/'.$user);
 			$file = fopen('user_folders/'.$user.'/product_data.json', 'w');
 			fclose($file);
 			echo '<script language="javascript">

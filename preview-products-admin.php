@@ -38,7 +38,7 @@
 		      document.getElementById("show_product").style.border="1px solid #A5ACB2";
 		    }
 		  }
-		  xmlhttp.open("GET","search_product.php?q="+str,true);
+		  xmlhttp.open("GET","search_product-admin.php?q="+str,true);
 		  xmlhttp.send();
 		}
 
@@ -60,7 +60,7 @@
 		      document.getElementById("show_product_cat").style.border="1px solid #A5ACB2";
 		    }
 		  }
-		  xmlhttp.open("GET","search_product.php?q="+str+"&c="+choice,true);
+		  xmlhttp.open("GET","search_product-admin.php?q="+str+"&c="+choice,true);
 		  xmlhttp.send();
 		}
 
@@ -82,7 +82,7 @@
 		      document.getElementById("show_product_subcat").style.border="1px solid #A5ACB2";
 		    }
 		  }
-		  xmlhttp.open("GET","search_product.php?q="+str+"&c="+choice+"&s="+sub_choice,true);
+		  xmlhttp.open("GET","search_product-admin.php?q="+str+"&c="+choice+"&s="+sub_choice,true);
 		  xmlhttp.send();
 		}
 
@@ -113,23 +113,6 @@
 	</head>
 	<body>
 	<!-- Header -->
-			<header id="header">
-				<h1>Product preview page</h1>
-				<nav id="nav">
-					<ul>
-						<li><a href="index.php">Home</a></li>
-						<li><a href="ourgoal.php">Our Goal</a></li>
-						<?php 
-						if(isset($_SESSION["username"])){
-							echo '<li><a href="logout.php" class="button special" rel="nofollow" onClick="return confirm(\'Do You Really Want To logout??\');">Logout</a></li>';
-						}
-						else{
-							echo '<li><a href="login.php" class="button special">Sign Up/In</a></li>';
-						}
-						?>
-					</ul>
-				</nav>
-			</header>
 
 			<!--Main section-->
 			<section id="main" class="wrapper">
@@ -333,56 +316,7 @@
 			</section>
 
 			<!-- Footer -->
-			<footer id="footer">
-				<div class="container">
-					<section class="links">
-						<div class="row">
-							<section class="3u 6u(medium) 12u$(small)">
-								<h3>Location</h3>
-								<ul class="unstyled">
-									<li><a>LDRP-ITR,</a></li>
-									<li><a>Sector-15,Near Kh-5,</a></li>
-									<li><a>Gandhinagar,</a></li>
-									<li><a>Gujarat.</a></li>
-								</ul>
-							</section>
-							<section class="3u$ 6u$(medium) 12u$(small)">
-								<h3>Contact Us</h3>
-								<ul class="unstyled">
-									<li><a>mail@onlineshopmaker.dx.am</a></li>
-									<li><a>(+91)9427606780</a></li>
-									<li><a>(+91)9408640023</a></li>
-								</ul>
-							</section>
-							</div>
-					</section>
-					<div class="row">
-						<div class="8u 12u$(medium)">
-							<ul class="copyright">
-								<li>&copy; Online Shop Maker. All rights reserved.</li>
-								<li>Design & Images: <a href="#">Online Shop Maker</a></li>
-							</ul>
-						</div>
-						<div class="4u$ 12u$(medium)">
-							<ul class="icons">
-								<li>
-									<a class="icon rounded fa-facebook"><span class="label">Facebook</span></a>
-								</li>
-								<li>
-									<a class="icon rounded fa-twitter"><span class="label">Twitter</span></a>
-								</li>
-								<li>
-									<a class="icon rounded fa-google-plus"><span class="label">Google+</span></a>
-								</li>
-								<li>
-									<a class="icon rounded fa-linkedin"><span class="label">LinkedIn</span></a>
-								</li>
-							</ul>
-						</div>
-					</div>
-				</div>
-			</footer>
-
+			
 	</body>
 
 </html>

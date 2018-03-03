@@ -18,8 +18,34 @@
 			<link rel="stylesheet" href="css/style.css" />
 			<link rel="stylesheet" href="css/style-xlarge.css" />
 		</noscript>
-
+	<style type="text/css">
+		.image_class{
+			position: relative;
+    		display: inline-block;
+    		font-size: 0;
+		}
+		.image_class .close{
+			position: absolute;
+			top: 3px;
+			right: 3px;
+			z-index: 100;
+			background-color: #FFF;
+		    padding: 5px 2px 2px;
+		    color: #000;
+		    font-weight: bold;
+		    cursor: pointer;
+		    opacity: .2;
+		    text-align: center;
+		    font-size: 22px;
+		    line-height: 10px;
+		    border-radius: 50%;
+		}
+		.image_class:hover .close {
+ 		   opacity: 1;
+		}
+	</style>
 	<script>
+		var images_to_delete = new Array();
 		function showResult(str) {
 		  if (str.length==0) { 
 		    document.getElementById("show_product").innerHTML="";
@@ -38,7 +64,7 @@
 		      document.getElementById("show_product").style.border="1px solid #A5ACB2";
 		    }
 		  }
-		  xmlhttp.open("GET","search_product.php?q="+str,true);
+		  xmlhttp.open("GET","search_update_product-admin.php?q="+str,true);
 		  xmlhttp.send();
 		}
 
@@ -60,7 +86,7 @@
 		      document.getElementById("show_product_cat").style.border="1px solid #A5ACB2";
 		    }
 		  }
-		  xmlhttp.open("GET","search_product.php?q="+str+"&c="+choice,true);
+		  xmlhttp.open("GET","search_update_product-admin.php?q="+str+"&c="+choice,true);
 		  xmlhttp.send();
 		}
 
@@ -82,7 +108,7 @@
 		      document.getElementById("show_product_subcat").style.border="1px solid #A5ACB2";
 		    }
 		  }
-		  xmlhttp.open("GET","search_product.php?q="+str+"&c="+choice+"&s="+sub_choice,true);
+		  xmlhttp.open("GET","search_update_product-admin.php?q="+str+"&c="+choice+"&s="+sub_choice,true);
 		  xmlhttp.send();
 		}
 
@@ -108,33 +134,63 @@
 			var choice = document.getElementById('choice_category').value;
 			document.getElementById('temp_cat_choice').value = choice;
 		}
+
+		function submit_data(){
+			var pro_name = document.getElementById("product_name").value;
+			var pro_price = document.getElementById("product_price").value;
+			var pro_stock = document.getElementById("product_stock").value;
+			var pro_threshold = document.getElementById("product_threshold").value;
+			if (pro_name==''){
+				event.preventDefault();
+				alert("You can not leave product_name empty!")
+				document.getElementById('product_name').focus();
+				return false;
+			}
+			else if (pro_price=='' || isNaN(pro_price)){
+				event.preventDefault();
+				alert("You can not leave product_price empty!")
+				document.getElementById('product_price').focus();
+				return false;
+			}
+			else if (pro_stock=='' || isNaN(pro_stock)){
+				event.preventDefault();
+				alert("You can not leave product_stock empty!")
+				document.getElementById('product_stock').focus();
+				return false;
+			}
+			else if (pro_threshold=='' || isNaN(pro_threshold)){
+				event.preventDefault();
+				alert("You can not leave product_threshold empty or it must be number!")
+				document.getElementById('product_threshold').focus();
+				return false;
+			}
+			else if (document.getElementById('image_count').value == images_to_delete.length && document.getElementById('product_upload_image[]').value == ''){
+				event.preventDefault();
+				alert("You must keep at least one image, you have deleted all old images and no new images selected!")
+				document.getElementById('product_upload_image[]').focus();
+				return false;
+			}
+			console.log(images_to_delete);
+			document.getElementById('images_to_delete').value = JSON.stringify(images_to_delete);
+			console.log(document.getElementById('images_to_delete').value);
+			document.update_form.submit();
+		}
+
+		function delete_image(img_name){
+			console.log(img_name);
+			document.getElementById(img_name).style.display = 'none';
+			images_to_delete.push(img_name);
+		}
 	</script>
 
 	</head>
 	<body>
 	<!-- Header -->
-			<header id="header">
-				<h1>Product preview page</h1>
-				<nav id="nav">
-					<ul>
-						<li><a href="index.php">Home</a></li>
-						<li><a href="ourgoal.php">Our Goal</a></li>
-						<?php 
-						if(isset($_SESSION["username"])){
-							echo '<li><a href="logout.php" class="button special" rel="nofollow" onClick="return confirm(\'Do You Really Want To logout??\');">Logout</a></li>';
-						}
-						else{
-							echo '<li><a href="login.php" class="button special">Sign Up/In</a></li>';
-						}
-						?>
-					</ul>
-				</nav>
-			</header>
 
 			<!--Main section-->
 			<section id="main" class="wrapper">
 				<div class="container">
-					<h2 style="color:blue">Product entry summary</h2>
+					<h2 style="color:blue">Select product to update its data</h2>
 					<br>
 
 					<?php
@@ -175,9 +231,6 @@
 										}
 									}
 								}
-								echo "<h3>Total product categories: ".$count_cat;
-								echo "<br>Total product subcategories: ".$count_subcat;
-								echo "<br>Total products entered: ".$count_pro."</h3>";
 								$_SESSION["names"] = $list;
 								?>
 
@@ -296,26 +349,45 @@
 									$got_id = $_GET["i"];
 									if ($got_name != ""){
 										echo "<br><br><h4>Showing data for product name: ".$got_name."</h4>";
+										?>
+										<form enctype="multipart/form-data" method="post" id="update_form" name="update_form" action="update-data-admin.php">
+										<?php
 										$data_to_show = $json_array[$_SESSION['shop_name']][$list[$got_id][0]][$list[$got_id][1]][$got_name];
 										echo "<br>Product category: ".$list[$got_id][0];
 										echo "<br>Product subcategory: ".$list[$got_id][1];
+										echo "<br>product_name: <input type='text' id='product_name' name='product_name' value='".$got_name."'>";
 										foreach ($data_to_show as $key => $value) {
-											if ($key != "product_image")
-												if ($value != "")
-													echo "<br>".$key.": ".$value;
-												else
-													echo "<br>".$key.": Not specified";
+											if ($key != "product_image" && $key != "product_id"){
+												echo "<br>".$key.": <input type='text' id='".$key."' name='".$key."' value='".$value."'>";
+											}
+											else if ($key == "product_id"){
+												echo "<input type='hidden' id='product_id' name='product_id' value='".$value."'>";
+											}
 											else{
-												echo "<br>product_image<br>";
-												for ($j=0; $j<count($value); $j++){
+												echo "<br>product_image<br><strong>Once you delete image, action cannot be undone</strong><br>";
 												?>
-													<div style="position: relative; display: inline-block;">
+												<input type="hidden" id="image_count" name="image_count" value="<?php echo count($value); ?>">
+												<?php
+												for ($j=0; $j<count($value); $j++){
+												?>	<div class="image_class">
+													<div id="<?php echo $value[$j] ?>">
+													<span class="close" onclick="delete_image('<?php echo $value[$j] ?>');">&times;</span>
 													<br><img alt="Image could not be loaded" width="200" height="300" src="<?php echo 'user_folders/'.$_SESSION['username'].'/images/'.$value[$j]; ?>" border="5"/>
+													</div>
 													</div>
 												<?php
 												}
+												?>
+													<br><br>
+													<input type="file" id="product_upload_image[]" name="product_upload_image[]" accept="image/*" multiple/><label>Add more images (You can select multiple images)</label>
+												<?php
 											}
 										}
+										?>
+										<input type="hidden" name="images_to_delete" id="images_to_delete">
+										<button onclick="submit_data();">Update</button>
+										</form>	
+										<?php
 									}
 								?>
 								<script>    
@@ -333,56 +405,7 @@
 			</section>
 
 			<!-- Footer -->
-			<footer id="footer">
-				<div class="container">
-					<section class="links">
-						<div class="row">
-							<section class="3u 6u(medium) 12u$(small)">
-								<h3>Location</h3>
-								<ul class="unstyled">
-									<li><a>LDRP-ITR,</a></li>
-									<li><a>Sector-15,Near Kh-5,</a></li>
-									<li><a>Gandhinagar,</a></li>
-									<li><a>Gujarat.</a></li>
-								</ul>
-							</section>
-							<section class="3u$ 6u$(medium) 12u$(small)">
-								<h3>Contact Us</h3>
-								<ul class="unstyled">
-									<li><a>mail@onlineshopmaker.dx.am</a></li>
-									<li><a>(+91)9427606780</a></li>
-									<li><a>(+91)9408640023</a></li>
-								</ul>
-							</section>
-							</div>
-					</section>
-					<div class="row">
-						<div class="8u 12u$(medium)">
-							<ul class="copyright">
-								<li>&copy; Online Shop Maker. All rights reserved.</li>
-								<li>Design & Images: <a href="#">Online Shop Maker</a></li>
-							</ul>
-						</div>
-						<div class="4u$ 12u$(medium)">
-							<ul class="icons">
-								<li>
-									<a class="icon rounded fa-facebook"><span class="label">Facebook</span></a>
-								</li>
-								<li>
-									<a class="icon rounded fa-twitter"><span class="label">Twitter</span></a>
-								</li>
-								<li>
-									<a class="icon rounded fa-google-plus"><span class="label">Google+</span></a>
-								</li>
-								<li>
-									<a class="icon rounded fa-linkedin"><span class="label">LinkedIn</span></a>
-								</li>
-							</ul>
-						</div>
-					</div>
-				</div>
-			</footer>
-
+			
 	</body>
 
 </html>

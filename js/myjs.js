@@ -307,7 +307,7 @@
 					'<input type="text" id="product_price" name="product_price" required/><label>Product price<font Size="5" Color="red">*</font></label>'+
 					'<input type="text" id="product_stock" name="product_stock" required/><label>Product stock<font Size="5" Color="red">*</font></label>'+
 					'<input type="text" id="product_threshold" name="product_threshold" required/><label>Product threshold (it will notify when stock reaches threshold)<font Size="5" Color="red">*</font></label>'+
-					'<input type="file" id="product_image[]" name="product_image[]" accept="image/*" required multiple/><label>Product image (You can selsct multiple images)<font Size="5" Color="red">*</font></label>'+
+					'<input type="file" id="product_image[]" name="product_image[]" accept="image/*" required multiple/><label>Product image (You can select multiple images)<font Size="5" Color="red">*</font></label>'+
 					'<input type="hidden" id="product_id" name="product_id" value="'+(pad.substring(0, 5-count_temp.length)+count_temp)+'">'+
 					'<input type="text" id="product_brand" name="product_brand"><label>Product brand</label>'+
 					'<input type="text" id="product_size" name="product_size" placeholder="width x height x depth or S/M/L/XL"><label>Product size</label>'+
@@ -331,18 +331,18 @@
 							document.getElementById('product_name').focus();
 							return false;
 						}
-						else if (document.getElementById('product_price').value=='' || isNaN(document.getElementById('product_price').value)){
-							alert('Please enter product price!');
+						else if (document.getElementById('product_price').value=='' || isNaN(document.getElementById('product_price').value) || document.getElementById('product_price').value < 0){
+							alert('Please enter valid product price!');
 							document.getElementById('product_price').focus();
 							return false;
 						}
-						else if (document.getElementById('product_stock').value=='' || isNaN(document.getElementById('product_stock').value)){
-							alert('Please enter product stock!');
+						else if (document.getElementById('product_stock').value=='' || isNaN(document.getElementById('product_stock').value) || document.getElementById('product_stock').value < 0){
+							alert('Please enter valid product stock!');
 							document.getElementById('product_stock').focus();
 							return false;
 						}
-						else if (document.getElementById('product_threshold').value=='' || isNaN(document.getElementById('product_threshold').value)){
-							alert('Please enter product threshold!');
+						else if (document.getElementById('product_threshold').value=='' || isNaN(document.getElementById('product_threshold').value) || document.getElementById('product_threshold').value < 0){
+							alert('Please enter valid product threshold!');
 							document.getElementById('product_threshold').focus();
 							return false;
 						}
@@ -354,6 +354,11 @@
 						else if (document.getElementById('SubCat').value=='subcategory'){
 							alert('Please select product subcategory');
 							document.getElementById('SubCat').focus();
+							return false;
+						}
+						else if (document.getElementById('product_image[]').value == ''){
+							alert('You must select at least one image!');
+							document.getElementById('product_image[]').focus();
 							return false;
 						}
 
@@ -400,7 +405,7 @@
 		
 		function last_submit(){
 			if(confirm('Are you sure want to submit data entered till now? YOU CANNOT REVERT IF YOU PRESS OK!')){
-				if (confirm('YOU CANNOT REVERT NOW. Do you want to submit entered data for this product? IF YOU PRESS YES, THIS PRODUCT DATA WILL BE SUBMITTED, ELSE ONLY PREVIOUS DATA WILL BE PRESERVED!')){
+				if (confirm('YOU CANNOT REVERT NOW. Do you want to submit entered data for this product? IF YOU PRESS OK, THIS PRODUCT DATA WILL BE SUBMITTED, ELSE ONLY PREVIOUS DATA WILL BE PRESERVED!')){
 					var pname = document.getElementById('product_name').value;
 					if (pname==''){
 						alert('Please enter product name!');
