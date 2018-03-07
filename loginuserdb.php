@@ -2,7 +2,6 @@
 session_start();
 $username=$_POST["uname"];
 $pwd=$_POST["pwd"];
-$go_to=$_POST['hidden_go'];
 $c=mysqli_connect("fdb19.awardspace.net","2594801_onlineshopmaker","onlineshopmaker1");
 $z=mysqli_select_db($c,"2594801_onlineshopmaker");
 $au="select User_name,Active,Email,Name from user where User_name='".$username."' AND Password='".$pwd."'";

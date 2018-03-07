@@ -155,10 +155,20 @@
 		}
 		
 		var shopname;
+		var contact_email;
+		var contact_mobile;
+		var shop_address, shop_city, shop_state, shop_country, product_currency;
 		function last_check(){
 			var start=0;
 			var pattern=/^[A-Za-z0-9']+(\s{0,1}[A-Za-z0-9'])*$/;
 			shopname = document.getElementById('shopname').value;
+			contact_email = document.getElementById('contact_email').value;
+			contact_mobile = document.getElementById('contact_mobile').value;
+			shop_address = document.getElementById('shop_address').value;
+			shop_city = document.getElementById('shop_city').value;
+			shop_state = document.getElementById('shop_state').value;
+			shop_country = document.getElementById('shop_country').value;
+			product_currency = document.getElementById('product_currency').value;
 			if(shopname==''){
 				alert("Please Enter Shop Name");
 				document.getElementById("shopname").focus();
@@ -179,6 +189,41 @@
 			if(document.getElementById('product_type').value==''){
 				alert("Please Select how many Products!");
 				document.getElementById("product_type").focus();
+				return false;
+			}
+			else if (isNaN(document.getElementById('product_type').value) || document.getElementById('product_type').value < 0 || !(document.getElementById('product_type').value % 1 === 0)){
+				alert("Number of products must be positive integer!");
+				document.getElementById("product_type").focus();
+				return false;
+			}
+			else if (shop_address == ''){
+				alert("Please enter shop address!");
+				document.getElementById("shop_address").focus();
+				return false;
+			}
+			else if (contact_email == ''){
+				alert("Please enter contact email!");
+				document.getElementById("contact_email").focus();
+				return false;
+			}
+			else if (contact_mobile == ''){
+				alert("Please enter contact mobile!");
+				document.getElementById("contact_mobile").focus();
+				return false;
+			}
+			else if (shop_city == ''){
+				alert("Please enter city!");
+				document.getElementById("shop_city").focus();
+				return false;
+			}
+			else if (shop_state == ''){
+				alert("Please enter state!");
+				document.getElementById("shop_state").focus();
+				return false;
+			}
+			else if (shop_country == ''){
+				alert("Please enter country!");
+				document.getElementById("shop_country").focus();
 				return false;
 			}
 			document.getElementById('first_div').style.display='none';
@@ -313,19 +358,29 @@
 					'<input type="text" id="product_size" name="product_size" placeholder="width x height x depth or S/M/L/XL"><label>Product size</label>'+
 					'<input type="text" id="product_description" name="product_description"><label>Product description</label>'+
 					'<input type="text" id="product_gender" name="product_gender"><label>Product gender</label>'+
-					'<input type="text" id="product_offer_price" name="product_offer_price"><label>Product offer price</label>'+
-					'<input type="text" id="product_offer_percentage" name="product_offer_percentage"><label>Product offer in percentage(%)</label>'+
+					'<input type="text" id="product_offer_price" onkeyup="get_offer_percentage(this.value)" name="product_offer_price"><label>Product offer price</label>'+
+					'<input type="text" id="product_offer_percentage" onkeyup="get_offer_price(this.value)" name="product_offer_percentage"><label>Product offer in percentage(%)</label>'+
 					'<input type="text" id="product_color" name="product_color"><label>Product color</label>'+
 					'<input type="hidden" id="shop_name" name="shop_name" value="'+shopname+'">'+
 					'<input type="hidden" id="product_cat" name="product_cat">'+
 					'<input type="hidden" id="product_subcat" name="product_subcat">'+
 					'<input type="hidden" id="temp_flag" name="temp_flag" value="0">'+
+					'<input type="hidden" id="shop_address" name="shop_address" value="'+shop_address+'">'+
+					'<input type="hidden" id="shop_city" name="shop_city" value="'+shop_city+'">'+
+					'<input type="hidden" id="shop_state" name="shop_state" value="'+shop_state+'">'+
+					'<input type="hidden" id="shop_country" name="shop_country" value="'+shop_country+'">'+
+					'<input type="hidden" id="contact_email" name="contact_email" value="'+contact_email+'">'+
+					'<input type="hidden" id="contact_mobile" name="contact_mobile" value="'+contact_mobile+'">'+
+					'<input type="hidden" id="product_currency" name="product_currency" value="'+product_currency+'">'+
 					'</form>';
 				if (start < count){
 					var button = document.createElement("BUTTON");
 					var button_name = document.createTextNode("Next entry");
 					button.onclick = function(){
 						var pname = document.getElementById('product_name').value;
+						var product_offer_price = document.getElementById('product_offer_price').value;
+						var product_offer_percentage = document.getElementById('product_offer_percentage').value;
+						var product_price = document.getElementById('product_price').value;
 						if (pname==''){
 							alert('Please enter product name!');
 							document.getElementById('product_name').focus();
@@ -336,12 +391,12 @@
 							document.getElementById('product_price').focus();
 							return false;
 						}
-						else if (document.getElementById('product_stock').value=='' || isNaN(document.getElementById('product_stock').value) || document.getElementById('product_stock').value < 0){
+						else if (document.getElementById('product_stock').value=='' || isNaN(document.getElementById('product_stock').value) || document.getElementById('product_stock').value < 0 || !(document.getElementById('product_stock').value % 1 === 0)){
 							alert('Please enter valid product stock!');
 							document.getElementById('product_stock').focus();
 							return false;
 						}
-						else if (document.getElementById('product_threshold').value=='' || isNaN(document.getElementById('product_threshold').value) || document.getElementById('product_threshold').value < 0){
+						else if (document.getElementById('product_threshold').value=='' || isNaN(document.getElementById('product_threshold').value) || document.getElementById('product_threshold').value < 0 || !(document.getElementById('product_threshold').value % 1 === 0)){
 							alert('Please enter valid product threshold!');
 							document.getElementById('product_threshold').focus();
 							return false;
@@ -360,6 +415,42 @@
 							alert('You must select at least one image!');
 							document.getElementById('product_image[]').focus();
 							return false;
+						}
+						else if (product_offer_price != '' && (isNaN(product_offer_price) || product_offer_price < 0)){
+							alert('Offer price must be a non-nagetive number!');
+							document.getElementById('product_offer_price').focus();
+							return false;
+						}
+						else if (product_offer_percentage != '' && (isNaN(product_offer_percentage) || product_offer_percentage < 0)){
+							alert('Offer percentage must be a non-nagetive number!');
+							document.getElementById('product_offer_percentage').focus();
+							return false;
+						}
+						else if (product_offer_price != '' || product_offer_percentage != ''){
+							var get_per = ((product_price - product_offer_price)*100)/(product_price);
+							if (!((product_offer_percentage - get_per) < 0.5 && (product_offer_percentage - get_per) > (0-0.5))){
+								alert('Offer price and percentage not matched with actual price!');
+								document.getElementById('product_offer_percentage').focus();
+								return false;
+							}
+						}
+						else if (product_offer_price > product_price){
+							alert('Offer price cannot be more than product price!');
+							document.getElementById('product_offer_price').focus();
+							return false;
+						}
+						else if (product_offer_percentage > 100){
+							alert('Offer percentage cannot be more than 100!');
+							document.getElementById('product_offer_percentage').focus();
+							return false;
+						}
+						else if (product_offer_price != '' && product_offer_percentage == ''){
+							var get_percentage = ((product_price - product_offer_price)*100)/(product_price);
+							document.getElementById('product_offer_percentage').value = get_percentage;
+						}
+						else if (product_offer_price == '' && product_offer_percentage != ''){
+							var get_price = ((100 - product_offer_percentage)*product_price)/100;
+							document.getElementById('product_offer_price').value = get_price;
 						}
 
 						for (i = 0; i < product_list.length; i++){
@@ -401,8 +492,29 @@
 			}
 			
 		}
+
+		function get_offer_percentage(off_pri){
+			var pro_pri = document.getElementById('product_price').value;
+			if (pro_pri != '' && off_pri != '' && !isNaN(pro_pri) && !isNaN(off_pri) && off_pri >= 0 && pro_pri > 0){
+				var get_percentage = ((pro_pri - off_pri)*100)/(pro_pri);
+				document.getElementById('product_offer_percentage').value = get_percentage.toFixed(2);
+			}
+			if (off_pri == ''){
+				document.getElementById('product_offer_percentage').value = '';
+			}
+		}		
 		
-		
+		function get_offer_price(off_per){
+			var pro_pri = document.getElementById('product_price').value;
+			if (pro_pri != '' && off_per != '' && !isNaN(pro_pri) && !isNaN(off_per) && off_per >=0 && pro_pri > 0){
+				var get_price = ((100 - off_per)*pro_pri)/100;
+				document.getElementById('product_offer_price').value = get_price.toFixed(0);
+			}
+			if (off_per == ''){
+				document.getElementById('product_offer_price').value = '';
+			}
+		}
+
 		function last_submit(){
 			if(confirm('Are you sure want to submit data entered till now? YOU CANNOT REVERT IF YOU PRESS OK!')){
 				if (confirm('YOU CANNOT REVERT NOW. Do you want to submit entered data for this product? IF YOU PRESS OK, THIS PRODUCT DATA WILL BE SUBMITTED, ELSE ONLY PREVIOUS DATA WILL BE PRESERVED!')){
